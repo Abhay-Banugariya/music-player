@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import MusicPlayer from './components/MusicPlayer';
 
 const App = () => {
   const [names, setNames] = useState([]);
   const [selectedName, setSelectedName] = useState(null);
   const [selectedData, setSelectedData] = useState([]);
+  const [selectedSong, setSelectedSong] = useState(null);
+
 
   const handleClick = async (name) => {
     console.log('Clicked name:', name);
@@ -16,8 +19,9 @@ const App = () => {
       console.log('Response data:', data);
       const newData = data.names;
       if (Array.isArray(newData) && newData.length > 0 && newData[0].hasOwnProperty('name')) {
-        const fetchedNameData = newData.find(item => item.name === name);
+        // const fetchedNameData = newData.find(item => item.name === name);
         setSelectedData(newData);
+
       } else {
         console.error('Unexpected data format or name not found');
       }
@@ -52,21 +56,7 @@ const App = () => {
       {/* Conditionally render the fetched data based on selectedName */}
       {selectedData && (
         <div>
-          <h2>Fetched data for: {selectedName}</h2>
-          {/* Display or use the fetched data based on its structure */}
-          {typeof selectedData === 'object' && (
-            <>
-              <p>Name: {selectedData.name}</p>
-              <ul>
-                {selectedData.map((item, index) => (
-                  <li key={index}>
-                    <a href={item.url}>{item.name}</a>
-                  </li>
-                ))}
-              </ul>
-
-            </>
-          )}
+          <MusicPlayer songs={selectedData && selectedData.length > 0 ? selectedData : null} />
         </div>
       )}
     </div>
